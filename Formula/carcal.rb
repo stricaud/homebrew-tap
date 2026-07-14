@@ -1,8 +1,8 @@
 class Carcal < Formula
   desc "Terminal packet analyzer — a tiny Wireshark for the TUI (aka carcal)"
   homepage "https://github.com/stricaud/carcal"
-  url "https://github.com/stricaud/carcal/archive/refs/tags/v0.0.4.tar.gz"
-  sha256 "08140790f837391739e08ce96f0632be720309bc752f9acf11626124d7e24f03"
+  url "https://github.com/stricaud/carcal/archive/refs/tags/v0.1.2.tar.gz"
+  sha256 "e99359b0821f9252a757c0cf685947c11a5f817a6ecbd0b32cf7b5330fbb84c2"
   license "MIT"
   head "https://github.com/stricaud/carcal.git", branch: "main"
 
