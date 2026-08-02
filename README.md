@@ -6,8 +6,8 @@ analyzer and its libraries.
 | Formula     | Command  | What it is                                                     | License        |
 |-------------|----------|----------------------------------------------------------------|----------------|
 | `carcal`    | `carcal` | Terminal packet analyzer — a tiny Wireshark for the TUI        | MIT            |
-| `gtcaca`    | —        | libcaca-based TUI widget toolkit (used by carcal)              | Public domain  |
-| `libpcapng` | —        | pcapng read/write, reassembly, dissection and `.posa` decoders | MIT            |
+| `gtcaca`    | —        | TUI widget toolkit built on libcaca (used by carcal)          | Public domain  |
+| `libpcapng` | —        | Read/write, reassemble and dissect pcapng, with `.posa` decoders | MIT          |
 
 `carcal` depends on `gtcaca` and `libpcapng`, so installing it pulls in
 everything automatically.
@@ -73,6 +73,9 @@ automatically. You just need Homebrew itself:
   the `CARCAL_PROTOS_DIR` / `CARCAL_GRAMMARS_DIR` environment variables.
 - `libpcapng`'s optional Python bindings are **not** built by this tap
   (`-DLIBPCAPNG_BINDINGS=OFF`), so no Python/pybind11 toolchain is required.
+- `carcal --version` reports the tag it was built from, and
+  `carcal --list-protocols` lists every dissector it loaded together with the
+  `protos/` directory they came from — the quickest way to check an install.
 
 ## Troubleshooting
 
