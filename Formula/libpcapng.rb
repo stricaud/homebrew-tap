@@ -1,8 +1,8 @@
 class Libpcapng < Formula
   desc "Library to read, write, reassemble and dissect pcapng, with posa decoders"
   homepage "https://github.com/stricaud/libpcapng"
-  url "https://github.com/stricaud/libpcapng/archive/refs/tags/v0.17.1.tar.gz"
-  sha256 "5077647f59cbbb255302076691c98ab7e4672b7f7622d885226293ad49f8f595"
+  url "https://github.com/stricaud/libpcapng/archive/refs/tags/v0.18.4.tar.gz"
+  sha256 "29ba2d05b599866de151b1b91eda96820ae9284d2d65f1332912e981c1f9645c"
   license "MIT"
   head "https://github.com/stricaud/libpcapng.git", branch: "main"
 
