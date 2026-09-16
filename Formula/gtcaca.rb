@@ -1,8 +1,8 @@
 class Gtcaca < Formula
   desc "TUI widget toolkit built on libcaca"
   homepage "https://github.com/stricaud/gtcaca"
-  url "https://github.com/stricaud/gtcaca/archive/refs/tags/v0.2.3.tar.gz"
-  sha256 "7df697e703699ba90d4063389a267d50062fafec0e0c5e552116de331baa8b54"
+  url "https://github.com/stricaud/gtcaca/archive/refs/tags/v0.2.5.tar.gz"
+  sha256 "ee5e79f4ccf21eae79ba8213ed92de1d80f3c72d4308f1ab24297bdc07268848"
   license :public_domain
   head "https://github.com/stricaud/gtcaca.git", branch: "main"
 
