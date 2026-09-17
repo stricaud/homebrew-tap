@@ -34,6 +34,25 @@ class Faup < Formula
     system "cmake", "--build", "build", "--target", "faupl"
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
+
+    # Upstream's faup.pc.cmake was added in Dec 2018, after the v1.5 tag (May
+    # 2016), so the released tarball installs no pkg-config file at all and
+    # `pkg-config --libs faup` finds nothing. Provide the same fields here,
+    # against the opt prefix so the file keeps working across version bumps.
+    # Drop this block once a tagged release ships faup.pc itself.
+    (lib/"pkgconfig").mkpath
+    (lib/"pkgconfig/faup.pc").write <<~PKGCONFIG
+      prefix=#{opt_prefix}
+      exec_prefix=${prefix}
+      libdir=#{opt_lib}
+      includedir=#{opt_include}
+
+      Name: faup
+      Description: Library parsing URLs
+      Version: #{version}
+      Libs: -L${libdir} -lfaupl
+      Cflags: -I${includedir}
+    PKGCONFIG
   end
 
   test do
@@ -49,5 +68,30 @@ class Faup < Formula
     # than two labels -- assert it is found, since a missing data dir degrades
     # silently.
     assert_equal "co.uk", pipe_output("#{bin}/faup -f tld", "http://www.example.co.uk/\n").strip
+
+    # The library and headers are meant to be consumed by other programs, so
+    # check pkg-config resolves them and that the result actually compiles.
+    assert_equal version.to_s, shell_output("pkg-config --modversion faup").strip
+    (testpath/"consumer.c").write <<~'C'
+      #include <string.h>
+      #include <stdio.h>
+      #include <faup/faup.h>
+      #include <faup/options.h>
+      #include <faup/decode.h>
+      #include <faup/output.h>
+      int main(void) {
+        faup_options_t *opts = faup_options_new();
+        faup_handler_t *fh = faup_init(opts);
+        const char *url = "http://www.example.co.uk/";
+        faup_decode(fh, url, strlen(url));
+        printf("%.*s\n", (int)faup_get_tld_size(fh), url + faup_get_tld_pos(fh));
+        faup_terminate(fh);
+        faup_options_free(opts);
+        return 0;
+      }
+    C
+    flags = shell_output("pkg-config --cflags --libs faup").chomp.split
+    system ENV.cc, "consumer.c", *flags, "-o", "consumer"
+    assert_equal "co.uk", shell_output("./consumer").strip
   end
 end
