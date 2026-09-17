@@ -1,13 +1,14 @@
 # stricaud/homebrew-tap
 
 A [Homebrew](https://brew.sh) tap for **carcal** — a terminal (TUI) packet
-analyzer and its libraries.
+analyzer and its libraries — and **faup**, a URL parser.
 
 | Formula     | Command  | What it is                                                     | License        |
 |-------------|----------|----------------------------------------------------------------|----------------|
 | `carcal`    | `carcal` | Terminal packet analyzer — a tiny Wireshark for the TUI        | MIT            |
 | `gtcaca`    | —        | TUI widget toolkit built on libcaca (used by carcal)          | Public domain  |
 | `libpcapng` | —        | Read/write, reassemble and dissect pcapng, with `.posa` decoders | MIT          |
+| `faup`      | `faup`   | URL parser — splits a URL into scheme, domain, TLD, query string | WTFPL        |
 
 `carcal` depends on `gtcaca` and `libpcapng`, so installing it pulls in
 everything automatically.
@@ -43,6 +44,23 @@ brew install stricaud/tap/libpcapng
 brew install stricaud/tap/gtcaca
 ```
 
+### faup
+
+`faup` is independent of `carcal` — install it on its own:
+
+```sh
+brew install stricaud/tap/faup
+```
+
+It reads URLs on **stdin** (a URL given as an argument is treated as a file to
+read, and silently produces nothing):
+
+```sh
+echo "http://www.example.co.uk/path?q=1" | faup
+echo "http://www.example.co.uk/path?q=1" | faup -o json
+echo "http://www.example.co.uk/path?q=1" | faup -f tld      # co.uk
+```
+
 ## Update
 
 ```sh
@@ -71,6 +89,15 @@ automatically. You just need Homebrew itself:
 - Bundled protocol decoders (`.posa`) and editor grammars are installed under
   `$(brew --prefix)/share/carcal/`. Override the search path at runtime with
   the `CARCAL_PROTOS_DIR` / `CARCAL_GRAMMARS_DIR` environment variables.
+- `faup` is built with Lua so its output modules in
+  `$(brew --prefix)/share/faup/modules_available/` work. Its Mozilla public
+  suffix list lives in `$(brew --prefix)/share/faup/mozilla.tlds`; `faup -u`
+  refreshes it from the network.
+- If you previously installed faup from source into `/usr/local`, the old
+  `/usr/local/lib/libfaupl.1.dylib` can shadow the Homebrew one when
+  `DYLD_LIBRARY_PATH` includes `/usr/local/lib` — the symptom is
+  `dyld: Symbol not found` on startup. Remove the old install or drop
+  `/usr/local/lib` from `DYLD_LIBRARY_PATH`.
 - `libpcapng`'s optional Python bindings are **not** built by this tap
   (`-DLIBPCAPNG_BINDINGS=OFF`), so no Python/pybind11 toolchain is required.
 - `carcal --version` reports the tag it was built from, and
